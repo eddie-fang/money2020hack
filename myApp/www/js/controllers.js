@@ -3,24 +3,8 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
 
-  $.ajax({
-    url: 'https://sandbox-quickbooks.api.intuit.com/v3/company/1292735740/query?query=select%20%2A%20from%20Invoice',
-    type: "GET",
-    crossDomain: true,
-    Authorization: {
-      'oauth_token': localStorage.getItem('auth'),
-      'oauth_nonce': '',
-      'oauth_consumer_key': '',
-      'oauth_signature_method': '',
-      'oauth_version' : '',
-    },
-    dataType: "json",
-    success: function(result){
-      alert(result)
-    },
-    fail: function(result){
-      alert('failure')
-    }
+  $.get( "http://localhost:3388/test", function( data ) {
+    alert(data);
   });
 
   $scope.loginData = {};

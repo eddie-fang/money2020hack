@@ -21,6 +21,7 @@ public class MyDemoApplication extends ResourceConfig {
 		this.register(RequestContextFilter.class);
 		this.register(TestResource.class);
 		this.register(JacksonFeature.class);
+		this.register(CorsResponseFilter.class);
 		// Use this for registering a full set of resources.
 		// this.packages("org.foo.rest;org.bar.rest");
 	}
