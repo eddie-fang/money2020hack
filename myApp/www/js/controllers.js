@@ -3,10 +3,6 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
 
-  $.get( "http://localhost:3388/oauth", function( data ) {
-    location.href = data;
-  });
-
   $scope.loginData = {};
 
   // Create the login modal that we will use later
@@ -38,7 +34,12 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
+.controller('PlaylistsCtrl', function($scope, $http) {
+  $http.get("http://localhost:3388/oauth").success(function(result){
+      location.href = result;
+  });
+
+
   $scope.playlists = [
     { title: 'Reggae', id: 1 },
     { title: 'Chill', id: 2 },

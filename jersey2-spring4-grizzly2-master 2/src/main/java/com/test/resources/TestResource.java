@@ -1,11 +1,14 @@
 package com.test.resources;
 
+import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import org.springframework.stereotype.Component;
 
@@ -65,6 +68,7 @@ public class TestResource {
 	@Path("/request-token-ready")
 	@Produces("text/html")
 	public String tokenReady(
+			@Context final HttpServletResponse res,
 			@QueryParam("oauth_token") String requestToken,
 			@QueryParam("oauth_verifier") String verifierCode,
 			@QueryParam("realmId") String realmID,
@@ -79,10 +83,16 @@ public class TestResource {
             accessToken = oAuthAccessToken.get("accessToken");
             accessTokenSecret = oAuthAccessToken.get("accessTokenSecret");
             
-            return "success";
+            try {
+				res.sendRedirect("http://localhost:8100/#/app/browse");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
         } catch (OAuthException e) {
             throw new RuntimeException(e);
         }
+        return null;
 	}	
 }
