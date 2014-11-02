@@ -20,6 +20,11 @@ import com.intuit.ia.exception.OAuthException;
 @Path("/")
 public class TestResource {
 
+	private String requestTokenSecret = null;
+	private String accessToken = null;
+	private String accessTokenSecret = null;
+	
+	
 	@GET
 	@Path("/test")
 	@Produces("text/html")
@@ -42,8 +47,10 @@ public class TestResource {
 
             //Pull the values out of the map
             final String requestToken = requestTokenAndSecret.get("requestToken");
-            final String requestTokenSecret = requestTokenAndSecret.get("requestTokenSecret");
+            requestTokenSecret = requestTokenAndSecret.get("requestTokenSecret");
 
+            	
+            
             // Retrieve the Authorize URL
             final String authURL = client.getOauthAuthorizeUrl(requestToken);
 
@@ -58,10 +65,24 @@ public class TestResource {
 	@Path("/request-token-ready")
 	@Produces("text/html")
 	public String tokenReady(
-			@QueryParam("oauth_token") String oauthToken,
-			@QueryParam("oauth_verifier") String oauthVerifier,
-			@QueryParam("realmId") String realmId,
+			@QueryParam("oauth_token") String requestToken,
+			@QueryParam("oauth_verifier") String verifierCode,
+			@QueryParam("realmId") String realmID,
 			@QueryParam("dataSource") String dataSource) {
-		return "hello";
+		IAPlatformClient client = new IAPlatformClient();
+
+        try {
+            final Map<String, String> oAuthAccessToken = client.getOAuthAccessToken(verifierCode, requestToken, requestTokenSecret,
+            		"qyprdn18xF8aWuyGTAnOGjbFwOscBw", 
+            		"b3Ce11KHkGmjb44NO9vpGUTMuxeoryvcHA5Qpu9L");
+            
+            accessToken = oAuthAccessToken.get("accessToken");
+            accessTokenSecret = oAuthAccessToken.get("accessTokenSecret");
+            
+            return "success";
+
+        } catch (OAuthException e) {
+            throw new RuntimeException(e);
+        }
 	}	
 }
