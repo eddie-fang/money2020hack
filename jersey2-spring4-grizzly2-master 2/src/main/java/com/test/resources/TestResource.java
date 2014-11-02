@@ -36,7 +36,7 @@ public class TestResource {
 
 	@GET
 	@Path("/test")
-	@Produces("text/html")
+	@Produces("text/json")
 	public String test() {
 		String uri = "https://sandbox-quickbooks.api.intuit.com/v3/company/1292735740/query?query=select%20%2A%20from%20Invoice";
 
@@ -52,80 +52,9 @@ public class TestResource {
 			
 			OAuthRequest request = new OAuthRequest(Verb.GET, uri);
 			service.signRequest(token, request); 
+			request.addHeader("Accept", "application/json");
 			Response response = request.send();
-			System.out.println(response.getBody());
-			
-			/*
-			URL url = new URL(uri);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestProperty("Accept", "application/json"); 
-
-			Calendar tempcal = Calendar.getInstance();
-			long ts = tempcal.getTimeInMillis();// get current time in milliseconds
-			String oauth_timestamp = (new Long(ts/1000)).toString(); // then divide by 1000 to get seconds			
-            
-            String uuid_string = UUID.randomUUID().toString();
-    			uuid_string = uuid_string.replaceAll("-", "");
-    		
-			String[][] data = {
-					{"oauth_token", accessToken},
-					{"oauth_consumer_key", "qyprdn18xF8aWuyGTAnOGjbFwOscBw"},
-					{"oauth_nonce",  uuid_string},
-					{"oauth_signature", ""},
-					{"oauth_signature_method", "HMAC-SHA1"},
-					{"oauth_timestamp", oauth_timestamp},
-					{"oauth_version", "1.0"}
-			};
-
-			String signature_base_string = 
-	                "GET&"+URLEncoder.encode(uri, "UTF-8")+"&";
-	            for(int i = 0; i < data.length; i++) {
-	                signature_base_string +=
-	                    URLEncoder.encode(data[i][0], "UTF-8") + "%3D" +
-	                    URLEncoder.encode(data[i][1], "UTF-8") + "%26";
-	            }
-	            // cut the last appended %26 
-	            signature_base_string = signature_base_string.substring(0,
-	                signature_base_string.length()-3);
-
-	            Mac m = Mac.getInstance("HmacSHA1");
-	            m.init(new SecretKeySpec("b3Ce11KHkGmjb44NO9vpGUTMuxeoryvcHA5Qpu9L".getBytes(), "HmacSHA1"));
-	            m.update(signature_base_string.getBytes());
-	            byte[] res = m.doFinal();
-	            String sig = String.valueOf(Base64Coder.encode(res));
-	            data[3][1] = sig;
-	            
-			String header = "OAuth ";
-			for(String[] item : data) {
-				header += item[0]+"=\""+item[1]+"\", ";
-			}
-			// cut off last appended comma
-			header = header.substring(0, header.length()-2);
-
-			connection.setRequestProperty("Authorization", header);
-			
-			// just want to do an HTTP GET here
-			connection.setRequestMethod("GET");
-
-			// give it 15 seconds to respond
-			connection.setReadTimeout(15*1000);
-			connection.connect();
-			
-			BufferedReader reader = null;
-		    StringBuilder stringBuilder;
-		    
-			 // read the output from the server
-		      reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		      stringBuilder = new StringBuilder();
-		 
-		      String line = null;
-		      while ((line = reader.readLine()) != null)
-		      {
-		        stringBuilder.append(line + "\n");
-		      }
-		    
-		      return stringBuilder.toString();
-		   */
+			return response.getBody(); 			
 		}
 		catch (Exception e)
 		{
