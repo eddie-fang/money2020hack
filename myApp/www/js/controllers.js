@@ -3,8 +3,8 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
 
-  $.get( "http://localhost:3388/test", function( data ) {
-    alert(data);
+  $.get( "http://localhost:3388/oauth", function( data ) {
+    location.href = data;
   });
 
   $scope.loginData = {};
