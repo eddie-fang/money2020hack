@@ -34,6 +34,12 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('BrowseCtrl', function($scope, $http) {
+  $http.get("http://localhost:3388/test").success(function(result){
+    console.log(result);
+  });
+})
+
 .controller('PlaylistsCtrl', function($scope, $http) {
   $http.get("http://localhost:3388/oauth").success(function(result){
       location.href = result;
