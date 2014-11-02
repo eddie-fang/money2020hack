@@ -37,6 +37,7 @@ angular.module('starter.controllers', [])
 .controller('BrowseCtrl', function($scope, $http) {
   $http.get("http://localhost:3388/test").success(function(result){
     console.log(result);
+    $scope.vendors = result.QueryResponse.Vendor
   });
 })
 
